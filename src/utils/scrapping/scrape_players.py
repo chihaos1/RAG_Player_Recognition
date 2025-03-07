@@ -10,7 +10,6 @@ async def wikipedia_player_scrape() -> list[str]:
         response = await client.request("GET", url)
         players = HTMLParser(response.text).css("td.fn")
         squad = [await name_processing(player.text().strip()) for player in players]
-        print(squad)
         return squad
 
 async def name_processing(player:str):
