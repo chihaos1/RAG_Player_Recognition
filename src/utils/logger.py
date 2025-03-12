@@ -8,7 +8,7 @@ logging_initialized = False
 
 def setup_logging():
     global logging_initialized
-    log_filename = pathlib.Path.cwd().parent / f"logs/run_{datetime.now().strftime('%Y-%m-%d')}.log"
+    log_filename = pathlib.Path.cwd().parent / f"logs/{datetime.now().strftime('%Y-%m-%d')}.log"
 
     if not logging_initialized:
         config_file = pathlib.Path.cwd().parent / "config/log_config.json"
