@@ -1,10 +1,8 @@
 import logging
-from asyncio import create_task, gather, run
 from httpx import AsyncClient
 from selectolax.parser import HTMLParser
 
-
-async def scrape_player_names() -> list[str]:
+async def get_player_names() -> list[str]:
     """Scrapes player names from Wikipedia"""
     
     async with AsyncClient() as client:
@@ -15,12 +13,13 @@ async def scrape_player_names() -> list[str]:
         logging.info(f"Squad scraped: {squad}")
         return squad
 
-async def process_names(name:str) -> str:
-    """Concatenate last names with space for image searchings later"""
+    async def process_names(name:str) -> str:
+        """Helper function of get_player_names. \
+            Concatenate last names with space for image searchings later"""
 
-    name_parts = name.split()
-    if len(name_parts) > 2:
-        concat_lname = "".join(name_parts[1:])
-        return " ".join([name_parts[0],concat_lname])
-    else:
-        return name
+        name_parts = name.split()
+        if len(name_parts) > 2:
+            concat_lname = "".join(name_parts[1:])
+            return " ".join([name_parts[0],concat_lname])
+        else:
+            return name
