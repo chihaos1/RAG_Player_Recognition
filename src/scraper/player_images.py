@@ -1,62 +1,90 @@
+import aiofiles
 import logging
-from asyncio import create_task, gather
-from contextlib import contextmanager
+import re
 from httpx import AsyncClient
 from pathlib import Path
-from os import listdir, mkdir
 from selectolax.parser import HTMLParser
 from shutil import rmtree
+from typing import AsyncGenerator, List
 
-async def create_folder(player_name:str) -> str:
+async def _create_folder_path(player_name: str) -> Path:
+    """Generates the folder path that will store the player images (helper function)"""
+    
+    return Path.cwd().parent / f"data/raw/images/{player_name.replace(' ','_')}"
+
+async def create_folder(player_name: str) -> str:
     """Create image folder for each player. Will re-create folder if already exists."""
 
-    try:
-        folder_path = Path.cwd().parent / f"data/raw/images/{player_name.replace(' ','_')}"
-        mkdir(folder_path)
-        logging.info(f"Folder created at: {folder_path}")
-        return folder_path
-    except FileExistsError as e:
+    folder_path = await _create_folder_path(player_name)
+    if folder_path.exists():
         rmtree(folder_path)
-        mkdir(folder_path)
-        logging.info(f"Folder re-created at: {folder_path}")
-        return folder_path
+    folder_path.mkdir(parents=True, exist_ok=True)
+    logging.info(f"Folder created at: {folder_path}")
+    
+    return folder_path
 
-async def get_image_urls(player_name:str):
+async def _build_url(player_name: str) -> str:
+        """Builds the Getty URL for the player (helper function)"""
+
+        full_name = player_name.split(" ")
+        query = f"{full_name[0]}%20{full_name[1]}"
+        return "https://www.gettyimages.com/search/2/image?compositions=portrait&numberofpeople=one&" + \
+                f"phrase={query}%20football&sort=mostpopular&license=rf%2Crm&compositions=portrait"
+
+async def get_image_urls(player_name: str) -> List[str]:
     """Scrapes all available image URLs from Getty Images for the provided player"""
 
-    full_name = player_name.split(" ")
-    first_name = full_name[0]
-    last_name = full_name[1]
-    target_url = f"https://www.gettyimages.com/search/2/image?phrase={first_name}%20{last_name}" + \
-                    "%20football&sort=mostpopular&license=rf%2Crm&compositions=portrait"
-    logging.info(f"Scrapping image at: {target_url}")
-
     async with AsyncClient() as client:
-        response = await client.request("GET", target_url)
+        try:
+            response = await client.request("GET", await _build_url(player_name))
+        except Exception as e:
+            logging.error(f"Failed to fetch image URLs for {player_name}: {e}")
+            return []
+
         image_url_list = HTMLParser(response.text).css("figure > picture > img")
         image_urls = [image_url.attributes.get("src") for image_url in image_url_list]
         logging.info(f"Total images found for {player_name}: {len(image_urls)}")
         return image_urls
-    
-async def download_image(player_name:str,player_image_url:str,player_image_folder_path:str):
-    """Download and store the image from the provided Getty URL"""
-    
-    image_number = len(listdir(player_image_folder_path))
-    image_path = player_image_folder_path / f"{player_name}_{image_number}.jpg"
+
+async def _async_generate_url(image_url_list: List[str])-> AsyncGenerator[str]:
+    """Generates the image urls of the player asynchronously (internal function)"""
+
+    for image_url in image_url_list[:10]:
+        yield image_url
+
+async def download_image(player_image_url: str,
+                         player_image_folder_path: str) -> None:
+    """Downloads and stores the image locally from the provided Getty URL"""
 
     async with AsyncClient() as client:
-        response = await client.request("GET", player_image_url)
-        with open(image_path, "wb") as file:
-            file.write(response.content)
+        try: 
+            response = await client.request("GET", player_image_url, timeout=10)
+        except Exception as e:
+            logging.error(f"Failed to download image {player_image_url}: {e}")
+            return None
 
-async def create_folder_get_urls_download_images(player_name:str) -> None:
-    """Composite function that combines creating folders, get image urls, and download images"""
+        async with aiofiles.open(player_image_folder_path, "wb") as image:
+            logging.info(f"Storing image at: {player_image_folder_path}")
+            await image.write(response.content)
+
+async def get_player_images(player_name: str) -> None:
+    """Composite function that combines create folders, get image urls, and download images"""
 
     player_image_folder_path = await create_folder(player_name)
     player_image_urls = await get_image_urls(player_name)
-    download_player_images_tasks = [create_task(
-                                        download_image(player_name,
-                                                       player_image_url,
-                                                       player_image_folder_path)) 
-                                        for player_image_url in player_image_urls[:10]] 
-    await gather(*download_player_images_tasks)
+
+    if not player_image_urls:
+        logging.warning(f"No images found for {player_name}. Skipping download.")
+        return
+
+    async for player_image_url in _async_generate_url(player_image_urls):
+        match = re.search(r"id/(\d+)/", player_image_url)
+        if not match:
+            logging.warning(f"Skipping invalid image URL: {player_image_url}")
+            continue
+
+        player_image_index = match.group(1)
+        player_image_path = player_image_folder_path / f"{player_name}_{player_image_index}.jpg"
+
+        await download_image(player_image_url,player_image_path)
+

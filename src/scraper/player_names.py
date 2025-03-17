@@ -1,11 +1,12 @@
 import logging
 from httpx import AsyncClient
 from selectolax.parser import HTMLParser
+from typing import List
 
-async def get_player_names() -> list[str]:
+async def get_player_names() -> List[str]:
     """Scrapes player names from Wikipedia"""
     
-    def process_names(name:str) -> str:
+    def process_names(name: str) -> str:
         """Helper function of get_player_names. \
             Concatenate last names with space for image searchings later"""
 
