@@ -50,7 +50,7 @@ async def get_image_urls(player_name: str) -> List[str]:
 #DOWNLOAD IMAGES
 async def _async_generate_url(
                 image_url_list: List[str], 
-                player_image_scrape_limit: int)-> AsyncGenerator[str]:
+                player_image_scrape_limit: int) -> AsyncGenerator:
     """Generates the image urls of the player asynchronously (internal function)"""
 
     for image_url in image_url_list[:player_image_scrape_limit]:

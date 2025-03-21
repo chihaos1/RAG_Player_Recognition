@@ -18,7 +18,7 @@ def create_pinecone_index(index_name: str, pinecone: Pinecone) -> None:
     if index_name not in pinecone.list_indexes().names():
         pinecone.create_index(
             name = index_name,
-            dimension = 768,
+            dimension = 128,
             metric = "cosine",
             spec = ServerlessSpec(
                 cloud = "aws",

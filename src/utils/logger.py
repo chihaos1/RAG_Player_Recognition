@@ -14,9 +14,10 @@ def setup_logging():
         config_file = pathlib.Path.cwd().parent / "config/log_config.json"
         with open(config_file) as fhand:
             config = json.load(fhand)
+            config["handlers"]["file"]["filename"] = log_filename
         logging_initialized = True
 
-    config["handlers"]["file"]["filename"] = log_filename
+    
     logging.config.dictConfig(config)
     
 def log(func):

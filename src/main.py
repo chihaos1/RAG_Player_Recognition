@@ -3,10 +3,12 @@ from dataclasses import dataclass
 from dotenv import load_dotenv, find_dotenv
 from os import getenv
 from embedder.image_embeddings import embed_player_images, upload_to_pinecone 
-from embedder.setup_pinecone import create_pinecone_index, initialize_pinecone
+from pathlib import Path
+from querier.image_query import query_pinecone
 from scraper.player_names import get_player_names
 from scraper.player_images import get_player_images
 from utils.logger import log
+from utils.pinecone import create_pinecone_index, initialize_pinecone
 
 @dataclass
 class ScrapeOptions:
@@ -17,6 +19,7 @@ class ScrapeOptions:
 @dataclass
 class EmbedOptions:
     create_index: bool = False
+    embed: bool = False
 
 @log
 async def scrape_images(options: ScrapeOptions) -> None:
@@ -38,8 +41,18 @@ async def prepare_images(options: EmbedOptions, index_name: str, api_key: str):
     index = pinecone.Index(index_name)
     image_embeddings = await embed_player_images(index)
     await upload_to_pinecone(image_embeddings,index)
-    
 
+@log
+async def query_images(index_name: str, api_key: str):
+    """Queries Pinecone to identify the player in the uploaded image"""
+
+    pinecone = initialize_pinecone(api_key)
+    index = pinecone.Index(index_name)
+    query_image_path = Path.cwd().parent / "data" / "query" / "Tonali.jpg"
+    
+    results = await query_pinecone(query_image_path,index,top_k=3)
+    print(results)
+    
 if __name__ == "__main__":
     load_dotenv(find_dotenv())
     PINECONE_API_KEY = getenv("PINECONE_API_KEY")
@@ -52,11 +65,15 @@ if __name__ == "__main__":
     )
 
     embed_options = EmbedOptions(
+        embed = False,
         create_index = True
     )
 
     if scrape_options.scrape:
         run(scrape_images(scrape_options))
     
-    run(prepare_images(embed_options,INDEX_NAME,PINECONE_API_KEY))
+    if embed_options.embed:
+        run(prepare_images(embed_options,INDEX_NAME,PINECONE_API_KEY))
+
+    run(query_images(INDEX_NAME, PINECONE_API_KEY))
     
