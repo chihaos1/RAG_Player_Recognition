@@ -5,7 +5,7 @@ from deepface import DeepFace
 from os import listdir
 from pathlib import Path
 from pinecone import Index
-from typing import AsyncGenerator, Callable, Dict, List
+from typing import AsyncGenerator, Dict, List
 
 #GET IAMGES
 async def _get_all_folders() -> List[str]:
@@ -29,7 +29,7 @@ async def _get_all_images() -> AsyncGenerator:
 
 #EMBEDDING
 async def generate_face_embedding(image_path: str):
-    """Generates a FaceNet embedding for an image."""
+    """Generates a FaceNet embedding for an image"""
     try:
         embedding = DeepFace.represent(image_path, model_name="Facenet", enforce_detection=False)
         return embedding[0]["embedding"]
@@ -37,8 +37,7 @@ async def generate_face_embedding(image_path: str):
         print(f"Error in face embedding generation: {e}")
         return None
 
-
-async def embed_player_images(index: str) -> List[Dict]:
+async def embed_player_images() -> List[Dict]:
     """Embeds player images"""
     
     face_embeddings = list()
