@@ -14,7 +14,7 @@ async def query_pinecone(image_path: str, index: Index, top_k: int = 1):
 
     return player_name
 
-async def query_openai(player_name: str):
+async def query_openai(player_name: str, llm:ChatOpenAI):
     """Queries OpenAI about the provided player
     
     """

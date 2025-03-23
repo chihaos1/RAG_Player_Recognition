@@ -48,12 +48,12 @@ async def query_images(index_name: str, openai_api_key: str, pinecone_api_key: s
     """Queries Pinecone to identify the player in the uploaded image"""
 
     pinecone = initialize_pinecone(pinecone_api_key)
-    openai = initialize_openai(openai_api_key)
+    llm = initialize_openai(openai_api_key)
     index = pinecone.Index(index_name)
     query_image_path = Path.cwd().parent / "data" / "query" / "Tonali.jpg"
     
     player_name = await query_pinecone(query_image_path,index,top_k=1)
-    await query_openai(player_name,openai)
+    await query_openai(player_name,llm)
     # print(results)
     
 if __name__ == "__main__":
