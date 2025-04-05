@@ -83,7 +83,7 @@ async def get_player_images(player_name: str, player_image_scrape_limit: int) ->
         return
 
     async for player_image_url in _async_generate_url(player_image_urls,player_image_scrape_limit):
-        match = re.search(r"id/(\d+)/", player_image_url)
+        match = re.search(r"id/(\d+)/", player_image_url) #Get the unique index of the image
         if not match:
             logging.warning(f"Skipping invalid image URL: {player_image_url}")
             continue

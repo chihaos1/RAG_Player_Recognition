@@ -9,7 +9,7 @@ async def _normalize_name(player_name:str):
     """Normalize player name to ASCII"""
     return unicodedata.normalize("NFKD", player_name).encode('ascii', errors='ignore').decode('ascii')
 
-async def get_player_names(player_scrape_limit: int) -> List[str]:
+async def get_player_names(team_name: str) -> List[str]:
     """Scrapes player names from Wikipedia"""
     
     async with AsyncClient() as client:
@@ -17,7 +17,7 @@ async def get_player_names(player_scrape_limit: int) -> List[str]:
         response = await client.request("GET", squad_url)
         players = HTMLParser(response.text).css("td.fn")
         squad = [await _normalize_name(player.text().strip()) for player in players]
-        logging.info(f"Squad scraped: {squad[:player_scrape_limit]}")
-        return squad[:player_scrape_limit]
+        logging.info(f"Squad scraped: {squad}")
+        return squad
 
     
