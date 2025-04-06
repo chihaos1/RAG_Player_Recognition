@@ -1,23 +1,16 @@
 import logging
-import unicodedata
+from unidecode import unidecode
 from httpx import AsyncClient
 from selectolax.parser import HTMLParser
 from typing import List
 
-#SCRAPE PLAYERS NAME
-async def _normalize_name(player_name:str):
-    """Normalize player name to ASCII"""
-    return unicodedata.normalize("NFKD", player_name).encode('ascii', errors='ignore').decode('ascii')
-
 async def get_player_names(team_name: str) -> List[str]:
     """Scrapes player names from Wikipedia"""
-    
+
     async with AsyncClient() as client:
-        squad_url = "https://en.wikipedia.org/wiki/2024–25_Newcastle_United_F.C._season"
+        squad_url = f"https://en.wikipedia.org/wiki/2024–25_{team_name}_F.C._season"
         response = await client.request("GET", squad_url)
         players = HTMLParser(response.text).css("td.fn")
-        squad = [await _normalize_name(player.text().strip()) for player in players]
+        squad = [unidecode(player.text().strip()) for player in players]
         logging.info(f"Squad scraped: {squad}")
         return squad
-
-    

@@ -1,21 +1,22 @@
 import aiofiles
 import logging
+import os
 import re
 from httpx import AsyncClient
 from pathlib import Path
 from selectolax.parser import HTMLParser
 from shutil import rmtree
-from typing import AsyncGenerator, List
+from typing import AsyncGenerator, List, Tuple
 
 #CREATE FOLDER
-async def _create_folder_path(player_name: str) -> Path:
+async def create_folder_path(player_name: str) -> Path:
     """Generates the folder path that will store the player images (helper function)"""
     return Path.cwd().parent / f"data/images/{player_name.replace(' ','_')}"
 
 async def create_folder(player_name: str) -> str:
     """Create image folder for each player. Will re-create folder if already exists."""
 
-    folder_path = await _create_folder_path(player_name)
+    folder_path = await create_folder_path(player_name)
     if folder_path.exists():
         rmtree(folder_path)
     folder_path.mkdir(parents=True, exist_ok=True)
@@ -24,7 +25,7 @@ async def create_folder(player_name: str) -> str:
     return folder_path
 
 #SCRAPE PLAYER IMAGES
-async def _build_url(player_name: str) -> str:
+async def build_url(player_name: str) -> str:
         """Builds the Getty URL for the player (helper function)"""
 
         full_name = player_name.split(" ")
@@ -37,7 +38,7 @@ async def get_image_urls(player_name: str) -> List[str]:
 
     async with AsyncClient() as client:
         try:
-            response = await client.request("GET", await _build_url(player_name))
+            response = await client.request("GET", await build_url(player_name))
         except Exception as e:
             logging.error(f"Failed to fetch image URLs for {player_name}: {e}")
             return []
@@ -48,7 +49,7 @@ async def get_image_urls(player_name: str) -> List[str]:
         return image_urls
 
 #DOWNLOAD IMAGES
-async def _async_generate_url(
+async def async_generate_url(
                 image_url_list: List[str], 
                 player_image_scrape_limit: int) -> AsyncGenerator:
     """Generates the image urls of the player asynchronously (internal function)"""
@@ -72,17 +73,18 @@ async def download_image(player_image_url: str,
             await image.write(response.content)
 
 #COMPOSITE
-async def get_player_images(player_name: str, player_image_scrape_limit: int) -> None:
+async def get_player_images(player_name: str, player_image_scrape_limit: int = 10) -> Tuple[str, int]:
     """Composite function that combines create folders, get image urls, and download images"""
 
     player_image_folder_path = await create_folder(player_name)
     player_image_urls = await get_image_urls(player_name)
 
     if not player_image_urls:
-        logging.warning(f"No images found for {player_name}. Skipping download.")
+        logging.warning(f"No images found for {player_name}. Will skip download and delete folder")
+        rmtree(player_image_folder_path)
         return
 
-    async for player_image_url in _async_generate_url(player_image_urls,player_image_scrape_limit):
+    async for player_image_url in async_generate_url(player_image_urls,player_image_scrape_limit):
         match = re.search(r"id/(\d+)/", player_image_url) #Get the unique index of the image
         if not match:
             logging.warning(f"Skipping invalid image URL: {player_image_url}")
@@ -93,3 +95,4 @@ async def get_player_images(player_name: str, player_image_scrape_limit: int) ->
 
         await download_image(player_image_url,player_image_path)
 
+    return (player_name, len(os.listdir(player_image_folder_path)))
