@@ -2,7 +2,6 @@ import logging
 import os
 import re
 import shutil
-from asyncio import to_thread
 from deepface import DeepFace
 from pathlib import Path
 from pinecone import Index

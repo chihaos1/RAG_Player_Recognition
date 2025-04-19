@@ -1,8 +1,8 @@
 import shutil
 from fastapi import APIRouter, File, UploadFile
 from fastapi.responses import JSONResponse
+from modules import query_pinecone, query_openai
 from pathlib import Path
-from querier.image_query import query_pinecone, query_openai
 from starlette import status
 from utils.pinecone import PineconeClient
 

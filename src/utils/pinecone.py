@@ -3,15 +3,15 @@ from dataclasses import dataclass
 from dotenv import load_dotenv, find_dotenv
 from pinecone import Pinecone
 
+load_dotenv(find_dotenv())
+
 @dataclass
 class PineconeClient:
-    load_dotenv(find_dotenv())
     PINECONE_API_KEY: str = os.getenv("PINECONE_API_KEY")
     PINECONE_INDEX_NAME: str = os.getenv("PINECONE_INDEX_NAME")
 
     def initialize_pinecone(self: str) -> Pinecone|None:
         """Initializes and return a Pinecone client object"""
-
         try:
             pinecone = Pinecone(api_key=self.PINECONE_API_KEY)
             return self.access_pinecone_index(pinecone)
