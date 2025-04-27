@@ -73,7 +73,7 @@ async def download_image(player_image_url: str,
             await image.write(response.content)
 
 #COMPOSITE
-async def get_player_images(player_name: str, player_image_scrape_limit: int = 10) -> Tuple[str, int]:
+async def get_player_images(player_name: str, player_image_scrape_limit) -> Tuple[str, int]:
     """Composite function that combines create folders, get image urls, and download images"""
 
     player_image_folder_path = await create_folder(player_name)

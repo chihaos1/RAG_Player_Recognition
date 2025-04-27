@@ -1,0 +1,46 @@
+#scrape_page_title {
+    min-height: 10%;
+}
+
+#selection-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    min-height: 75%;
+}
+
+#scrape-container {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.selection {
+    flex: 1;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 20px;
+    font-family: 'Poppins-Regular';
+}
+
+.choices {
+    width: 50%;
+    height: 10%;
+}
+
+#image-container {
+    flex: 1;
+    
+}
+
+#team-logo {
+    max-width: 50%;
+    max-height: 50%;
+
+}
+
+#scrape-button-container {
+}
+

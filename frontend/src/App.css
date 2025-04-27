@@ -1,5 +1,26 @@
+@font-face {
+  font-family: 'Poppins-Medium';
+  src: url('./assets/fonts/Poppins-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins-Regular';
+  src: url('./assets/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 #root {
-  max-width: 1280px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+
+  font-family: 'Poppins-Medium';
+  color: rgb(0, 0, 0);
+
+  height: 50vh;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
