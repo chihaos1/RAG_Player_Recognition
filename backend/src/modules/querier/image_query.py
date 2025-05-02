@@ -18,7 +18,9 @@ def query_openai(player_name: str):
     """Queries OpenAI about the provided player"""
     
     system_prompt = "You are a soccer expert and analyst."
-    user_prompt = f"Who is {player_name}? Provide his career history and play style. 3 bullet points for each."
+    user_prompt = f"Who is {player_name}? Provide his career history and play style. 3 bullet points for each. \
+                    Return in format  {{ 'Career History': [bullet points], 'Play Style':[bullet points]}} and nothing else. \
+                    Make sure it's proper JSON format, without the ```json and ``` at the end and newline characters"
     response = openai.chat.completions.create(
         model="gpt-4o", 
         messages=[

@@ -20,7 +20,7 @@ async def scrape_player_images(team_name: TeamOptions = Query(...), image_per_pl
     player_names = await get_player_names(team_name.value)
     get_player_images_tasks = [
         asyncio.create_task(get_player_images(player_name, image_per_player)) 
-        for player_name in player_names[:3]] 
+        for player_name in player_names[:5]] 
     results = await asyncio.gather(*get_player_images_tasks)
     scrape_results = {name: image_count for name, image_count in results}
 

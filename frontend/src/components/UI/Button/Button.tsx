@@ -1,9 +1,9 @@
 type ButtonProps = {
     text: string;
-    fn: () => void
+    customFunction: () => unknown
 }
 
-export default function Button({text, fn}: ButtonProps) {
+export default function Button({text, customFunction}: ButtonProps) {
 
-    return <button className="button">{text}</button>
+    return <button className="button" onClick={customFunction}>{text}</button>
 }

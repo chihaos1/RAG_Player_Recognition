@@ -1,0 +1,27 @@
+#embed_page_title {
+    min-height: 10%;
+}
+
+#scrape_results{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    min-height: 75%;
+}
+
+.player-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem
+}
+
+.player-image {
+    align-self: center;
+    max-width: 50%;
+    max-height: 50%;
+    margin-bottom: 1rem;
+}
+
+p {
+    margin: 0.5rem;
+}
