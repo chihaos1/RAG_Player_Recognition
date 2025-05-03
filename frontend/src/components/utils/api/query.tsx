@@ -16,7 +16,7 @@ export default async function query_images({image, update_query_status, append_q
     formData.append('file', image);
 
     const response: Response = (
-        await fetch("http://127.0.0.1:8082/query/image", {
+        await fetch("http://54.159.206.126:8000/query/image", {
             method: "POST",
             body: formData
         }))

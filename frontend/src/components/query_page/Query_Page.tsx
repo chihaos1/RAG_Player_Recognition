@@ -1,7 +1,7 @@
 import "./Query_Page.css"
-import Button from "../ui/Button/Button.tsx";
-import Card from "../ui/Card/Card.tsx"
-import { Spinner } from "../ui/Spinner/Spinner.tsx";
+import Button from "../UI/Button/Button.tsx";
+import Card from "../UI/Card/Card.tsx"
+import { Spinner } from "../UI/Spinner/Spinner.tsx";
 import query_images from "../utils/api/query.tsx";
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';

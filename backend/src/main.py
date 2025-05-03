@@ -5,7 +5,8 @@ from routers import embed, query, scrape
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "http://54.159.206.126:5173"
 ]
 
 app.add_middleware(

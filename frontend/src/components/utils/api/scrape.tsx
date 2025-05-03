@@ -10,7 +10,7 @@ type ScrapeProps = {
 export default async function scrape_images({team, image_count, update_scrape_status, update_click_status}:ScrapeProps) {
     update_click_status(true)
     const response: Response = (
-        await fetch(`http://127.0.0.1:8082/scrape/images?team_name=${team}&image_per_player=${image_count}`))
+        await fetch(`http://54.159.206.126:8000/scrape/images?team_name=${team}&image_per_player=${image_count}`))
     const data = await response.json()
     update_scrape_status(data, true)
     return data

@@ -1,7 +1,7 @@
 import "./Scrape_Page.css";
-import Button from "../ui/Button/Button.tsx";
-import Card from "../ui/Card/Card.tsx"
-import { Spinner } from "../ui/Spinner/Spinner.tsx";
+import Button from "../UI/Button/Button.tsx";
+import Card from "../UI/Card/Card.tsx"
+import { Spinner } from "../UI/Spinner/Spinner.tsx";
 import scrape_images from "../utils/api/scrape.tsx"
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
