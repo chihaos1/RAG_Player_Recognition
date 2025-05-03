@@ -3,8 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
   
-  /* background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%); */
-  background-image: url("./assets/images/Background.jpg");
+  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
   background-size: cover;
   font-synthesis: none;
   text-rendering: optimizeLegibility;

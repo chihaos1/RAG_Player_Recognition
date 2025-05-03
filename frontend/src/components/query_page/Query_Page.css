@@ -13,6 +13,11 @@
 #query-result {
     width: 100%;
     min-height: 80%;
+    padding: 1vh;
+    background:  rgba(0, 0, 0, 0.500);
+    border: 1px solid black;
+    padding: 1px;
+    border-radius: 1rem;
 }
 
 #query-button {
@@ -33,8 +38,8 @@
     background-color: rgba(255, 255, 255, 0.05);
     border: 2px dashed white;
     border-radius: 1rem;
-    width: 50%;
-    height: 30vh;
+    width: 30%;
+    height: 28vh;
     transition: transform 0.2s ease-in-out;
 }
 
@@ -56,4 +61,12 @@
 
 #image-name {
     max-height: 0vh;
+}
+
+h3 {
+    font-family: "Poppins-SemiBold";
+}
+
+p {
+    font-size: smaller;
 }

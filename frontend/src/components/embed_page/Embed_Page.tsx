@@ -6,7 +6,7 @@ import embed_images from "../utils/api/embed.tsx";
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import playerImg from '../../assets/images/Player.png'
+import playerImg from '../../assets/images/Player-1.png'
 
 type PlayerImages = { 
 	[key: string]: number }
@@ -26,7 +26,6 @@ export default function Embed_Page() {
         setClickStatus(clickStatus)
     }
 
-
 	useEffect(() => {
 		if (isEmbed) {
 			navigate("/query")
@@ -34,7 +33,7 @@ export default function Embed_Page() {
     }, [isEmbed])
 
 	return (
-	  <Card>
+	  <Card background="second">
 		<div id="embed_page_title">
                 <h2>Player Image Embedding</h2>
         </div>

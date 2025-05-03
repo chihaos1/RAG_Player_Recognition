@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: center; 
-    min-height: 75%;
+    min-height: 70%;
 }
 
 .player-container {
@@ -24,4 +24,8 @@
 
 p {
     margin: 0.5rem;
+} 
+
+img {
+    color: white;
 }

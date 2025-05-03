@@ -1,10 +1,22 @@
 .card {
-    background-image: linear-gradient(to top, #b7b7b7c0 0%, #7c7e7fc0 100%);
+    background-image: url("../../../assets/images/Background.jpg");
+    background-size: cover;
     border-radius: 1rem;
-    border: 5px solid white;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border: 1px solid white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.525);
     color: white;
     font-family: inherit;
     width: 50%;
-    /* overflow:scroll; */
+}
+
+.first {
+    background-image: url("../../../assets/images/Background.jpg");
+}
+
+.second {
+    background-image: url("../../../assets/images/Background-2.png");
+}
+
+.third {
+    background-image: url("../../../assets/images/Background-3.png");
 }

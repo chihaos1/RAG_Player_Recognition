@@ -57,7 +57,7 @@ export default function Query_Page() {
 	}
 
 	return (
-	  <Card>
+	  <Card background="third">
 		{!isQueried && (
 			<>
 				<div className="query_page_title">
@@ -66,7 +66,7 @@ export default function Query_Page() {
 				<div id="query-container">
 					<div id="image-dropbox" onClick={handleUploadClick} onDrop={handleDropImage} onDragOver={handleDragOver}>
 					<input id="image-input" type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange}/>
-					{previewURL  ? (<img id="preview" src={previewURL}/>) : (<p>Drop an Image Here</p>)}
+					{previewURL ? (<img id="preview" src={previewURL}/>) : (<p>Drop an Image Here</p>)}
 				</div>
 					{image ? (<p id="image-name">Selected Image: {image.name}</p>): (<p></p>)}
 				</div>
@@ -78,7 +78,6 @@ export default function Query_Page() {
 															update_click_status: handleClickStatus})}/>
 					{isClicked && <Spinner />}
 				</div>
-				
 			</>
 		)}
 		{isQueried && (
@@ -99,8 +98,7 @@ export default function Query_Page() {
 										{sectionContent.map((point, index) => (
 										<p key={index}>{point}</p>
 										))}
-									</div>
-								);
+									</div>);
 							})
 						})()}
 					</div>
@@ -109,7 +107,6 @@ export default function Query_Page() {
 							customFunction={() => handleReturnClick()}/>
 					</div>  	
 				</div>
-
 			</>
 		)}
 	  </Card>

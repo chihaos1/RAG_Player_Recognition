@@ -65,7 +65,7 @@ export default function Scrape_Page() {
     }, [isScraped])
 
     return (
-        <Card>
+        <Card background="first">
             <div id="scrape_page_title">
                 <h2>Player Image Scraping</h2>
             </div>
